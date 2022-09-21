@@ -24,9 +24,6 @@ public class OrderProductService {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    OrderService orderService;
-
     @Transactional
     public OrderProductModel save(OrderProductDto orderProductDto, OrderModel order) throws NoSuchElementException {
 

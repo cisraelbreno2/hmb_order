@@ -1,5 +1,8 @@
 package br.com.hmb_order.service;
 
+import br.com.hmb_order.caller.ClientCaller;
+import br.com.hmb_order.caller.UserCaller;
+import br.com.hmb_order.dto.OrderCompleteDto;
 import br.com.hmb_order.dto.OrderDto;
 import br.com.hmb_order.dto.OrderProductDto;
 import br.com.hmb_order.dto.ProductDto;
@@ -26,6 +29,15 @@ public class OrderService {
     @Autowired
     OrderProductService orderProductService;
 
+    @Autowired
+    UserCaller userCaller;
+
+    @Autowired
+    ClientCaller clientCaller;
+
+    @Autowired
+    RouteService routeService;
+
     @Transactional
     public OrderModel save(OrderDto orderDto){
         OrderModel order = new OrderModel();
@@ -37,6 +49,7 @@ public class OrderService {
         }
         order.setTotal(total);
         order.setOrderDate(new Date());
+        order.setRoute(routeService.findById(orderDto.getRouteId()).get());
         orderRepository.save(order);
 
         for (OrderProductDto dto :  orderDto.getOrderProductDtoList()) {
@@ -50,17 +63,17 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Optional<OrderDto> findOrderComplete(Long orderId){
+    public Optional<OrderCompleteDto> findOrderComplete(Long orderId){
         OrderModel order = orderRepository.findById(orderId).orElseThrow();
         List<OrderProductModel> orderProductModelList = orderProductService.findAllByOrderId(orderId);
-        OrderDto orderComplete = new OrderDto();
+        OrderCompleteDto orderComplete = new OrderCompleteDto();
 
         orderComplete.setId(order.getId());
         orderComplete.setOrderDate(order.getOrderDate());
 
         //CRIAR DENTRO DO MICROSSERVIÇO DE CLIENTE E DE USUARIO UM GET PARA RETORNAR OS DTOS
-        orderComplete.setClientId();
-        orderComplete.setUserId();
+        orderComplete.setClient(clientCaller.getClientById(order.getClientId()));
+        orderComplete.setUser(userCaller.getUserById(order.getUserId()));
         orderComplete.setRoute(order.getRoute());
         orderComplete.setOrderNumber(order.getOrderNumber());
 
@@ -69,9 +82,9 @@ public class OrderService {
             dto.setNote(orderProduct.getNote());
             dto.setQuantity(orderProduct.getQuantity());
 
-            ProductDto productDto = new ProductDto();
-            BeanUtils.copyProperties(dto.getProduct(), productDto);
-            dto.setProduct(productDto);
+            //ProductDto productDto = new ProductDto();
+            BeanUtils.copyProperties(orderProduct.getProduct(), dto.getProduct());
+            //dto.setProduct(productDto);
             orderComplete.getOrderProductDtoList().add(dto);
         }
 

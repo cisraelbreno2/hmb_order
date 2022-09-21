@@ -19,7 +19,7 @@ public class RouteController {
 
 
     @PostMapping("")
-    public ResponseEntity createClient(@RequestBody ProductDto productDto){
+    public ResponseEntity createRoute(@RequestBody ProductDto productDto){
 
         ProductModel product = productService.save(productDto);
 

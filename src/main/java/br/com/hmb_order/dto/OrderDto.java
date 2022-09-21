@@ -12,8 +12,7 @@ public class OrderDto {
 
     private Long id;
     private Integer orderNumber;
-    private Date orderDate;
-    private RouteModel route;
+    private Long routeId;
     private Long userId;
     private Long clientId;
     private List<OrderProductDto> orderProductDtoList;

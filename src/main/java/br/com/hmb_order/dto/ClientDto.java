@@ -9,5 +9,5 @@ public class ClientDto {
     private String name;
     private String phone;
     private String email;
-    private AddressDto addressDto;
+    private AddressDto address;
 }

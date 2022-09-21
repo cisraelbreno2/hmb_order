@@ -17,7 +17,7 @@ public class ProductController {
 
 
     @PostMapping("")
-    public ResponseEntity createClient(@RequestBody ProductDto productDto){
+    public ResponseEntity createProduct(@RequestBody ProductDto productDto){
 
         ProductModel product = productService.save(productDto);
 

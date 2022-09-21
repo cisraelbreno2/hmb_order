@@ -14,4 +14,8 @@ public class OrderProductDto {
     private ProductDto product;
     private String note;
     private Integer quantity;
+
+    public OrderProductDto(){
+        product = new ProductDto();
+    }
 }

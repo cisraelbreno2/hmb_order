@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
